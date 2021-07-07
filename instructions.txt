@@ -1,0 +1,8 @@
+We are going to build an exchange rate calculator
+*Using the fetch api to make an HTTP request to a 3rd-party api to get some exchange rates (the response) and then put that into the DOM
+*2 currency selectors for choosing any currency
+*2 exchange rate values
+*Swap button
+*Exact exchange rate value
+
+*The goal is get familiar with making requests and dealing with 3rd-party APIs
