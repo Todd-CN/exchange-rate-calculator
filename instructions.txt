@@ -6,3 +6,112 @@ We are going to build an exchange rate calculator
 *Exact exchange rate value
 
 *The goal is get familiar with making requests and dealing with 3rd-party APIs
+
+A brief refresher on fetch ----
+*Fetch is used to make HTTP requests either your backend (if you created your backend where you're dealing with a database - nodejs, php, python, etc.)
+    *If that's the case, a lot of times you will make a request from your front end (the client side) to your backend (to get your data)
+*You can also use 3rd-party APIs (what we're using for this project for the exchange rate numbers API)
+    *This API has an endpoint that we can hit, and we can pass in a currency as a URL parameter
+    *That will give us a response (using the fetch API) with all the countries and their exchange rates
+    *We can then use that data in our application
+
+*Before we make a request to an API, let's make a request just to a file because we can do that as well
+
+*JSON object
+ - very similar to a javascript object
+ - it has key/value pairs inside of curly braces
+ - Except, with JSON, the key and any string values are going to have double quotes
+
+*A JSON object
+{"id": 1, "text": "Item One"}
+
+*We can also have an array of JSON objects (or JSON arrays)
+[
+    {"id": 1, "text": "Item One"}
+    {"id": 2, "text": "Item Two"}
+    {"id": 3, "text": "Item Three"}
+]
+
+-This is similar to something you might get back from an API/from your backend
+
+Example
+-See calculate function in script.js
+1. We're just going to make a request to the items.json file 
+2. Remember- fetch() is built into the browser- we don't have to install it or anything
+3. There are different types of HTTP Requests
+    *If you just load a webpage or are getting data from a server- it will typically be a 'GET' request
+    *If you're posting data to the server (filling out a form that will be saved to a backend database), that would usually be a 'POST' request
+    *If you're updating data on a server, it will usually be a 'PUT' or 'PATCH' request
+    *If you're deleting something off the server, it would be a 'DELETE' request
+4. If we're making a 'GET' request, which is what we want to do here, we can put 'items.json' right in our fetch
+
+    function calculate() {
+      fetch("items.json");
+    }
+
+    calculate();
+
+5. Just as a side-note, if we wanted to do a 'POST' instead, we can add some options into our fetch request
+
+function calculate() {
+  fetch("items.json", {
+      method: 'POST',
+      headers: {
+        'Content-Type: application/json',
+        a whole bunch of other header options
+      }
+  });
+}
+
+calculate();
+
+Traversy has a crash course on youTube covering fetch API - you should check it out
+https://www.youtube.com/watch?v=Oive66jrwBs
+
+6. For a 'GET' request, we just use fetch("items.json"), we don't need to add any other options
+
+7. Fetch runs asynchronously, it runs in the background, and it returns a promise - when it's done fetching, it will return a promise
+
+8. We catch that promise with .then, which will give us a response, which we place in a callback function
+
+function calculate() {
+      fetch("items.json").then(res => {
+          console.log(res)
+      });
+    }
+
+    calculate();
+
+*The 'res' is the initial response from 'items.json'. Some of what it contains:
+    *A ReadableStream in the body
+    *HTTP status code
+        -an HTTP status code of 200 (means OK) if fetch is successful- 200 = good
+        -The whole 200 status code range is successful, but 201 and so forth mean different things
+        -For example status: 201 (means successful but it also means something was created on the server)
+        -if you inserted a blog post into a database and it was successful, you might get a 201 back
+        -300 range is re-direct
+        -400 range is user error (forgot an email in your form and email was required)
+        -500 server error- something happens on the server side
+    *Notice the data itself from 'items.json' is not here
+        -It's a little weird with the fetch api
+        -You have to take the initial response(res), and format/convert it to what you want
+        -In this case- we want to format/convert our intitial response to JSON
+        -Then, we get another promise back, so we can use .then again
+        -This will actually give us the json data back, so we can log the data
+
+            function calculate() {
+                fetch("items.json")
+                    .then((res) => res.json())
+                    .then((data) => console.log(data));
+            }
+
+            calculate();
+
+    *Now, you'll see we get the actual items back form our 'items.json' file, an array of 3 objects
+        -We can do whatever we want with this data
+        -Example 
+            .then((data) => document.body.innerHTML = data[0].text)
+        -What we've done here
+            1. We've called calcualte in our sciprt.js file
+            2. We fetched items.json, specified that we wanted the intitial response to be json
+            3. We got the data back and basically replaced everything in the body using innerHTML with the text value from the first item in our array of JSON objects
