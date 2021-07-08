@@ -25,7 +25,7 @@ function calculate() {
     });
 }
 
-// Event Listerners
+// Event Listeners
 currencyEl_one.addEventListener("change", calculate);
 amountEl_one.addEventListener("input", calculate);
 currencyEl_two.addEventListener("change", calculate);
